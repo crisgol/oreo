@@ -1,3 +1,4 @@
+https://blog.da2k.com.br/2014/01/19/manter-repositorio-github-forkado-sincronizado-com-o-original/
 git remote add upstream https://github.com/will123195/oreo.git
 git fetch upstream
 git merge upstream/master

@@ -43,9 +43,39 @@ var platforms = [
     silent: true,
     Promise: global.Promise || bluebird,
     models: models
+  },
+  {
+    driver: 'firebird',
+    user: 'SYSDBA',
+    pass: 'masterkey',
+    hosts: ['localhost/3050'],
+    name: 'F:/GOLSistemas/ERP/Database/BANCODIC.GDB',
+    debug: false,
+    silent: true,
+    Promise: global.Promise || bluebird,
+    models: models
   }
 ]
 
+var platformsfb = [
+   {
+    driver: 'firebird',
+    user: 'SYSDBA',
+    pass: 'masterkey',
+    hosts: ['localhost/3050'],
+    name11: 'F:/GOLSistemas/ERP/Database/BANCODIC.GDB',
+    name: 'K:/bd/producao/DIGIPONTOW.FDB',
+    debug: false,
+    silent: true,
+    Promise: global.Promise || bluebird,
+    models: models,
+
+    lowercase_keys : false, // set to true to lowercase keys
+    role: null,            // default
+    pageSize : 4096        // default when creating database
+
+  }
+]
 var showError = function (err) {
   console.log(err.stack)
 }
@@ -77,14 +107,14 @@ describe('oreo', function() {
 
   it('should fail with unknown driver', function(done) {
     db = oreo({
-      driver: 'mssql'
+      driver: 'firebird'
     }, function(err) {
       ok(!!err, 'did not fail')
       done()
     })
   })
 
-  platforms.forEach(function(config) {
+  platformsfb.forEach(function(config) {
 
     it('should connect and discover - cb', function(done) {
       console.log('\n', config.driver)

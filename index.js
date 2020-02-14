@@ -7,7 +7,8 @@ var extend = require('./lib/extend')
 
 var supportedDrivers = [
   'pg',
-  'mysql'
+  'mysql',
+  'node-firebird'
 ]
 
 var oreo = module.exports = function oreo(opts, cb) {
@@ -133,7 +134,7 @@ oreo.prototype.discover = function(opts, cb) {
         if (self[table].fk) {
           Object.keys(self[table].fk).forEach(function(fkName) {
             var fk = self[table].fk[fkName]
-            if (self[fk.foreignTable] && self[fk.foreignTable].many) {
+            if (self[fk.foreignTable] && self[fk.foreignTable].many) { /*todo cristiano*/
               var link = fk.constraintName + '_' + fk.table
               self[fk.foreignTable].many[link] = fk
             }
@@ -174,4 +175,63 @@ oreo.prototype.onReady = function(fn) {
 oreo.prototype.end = function(cb) {
   cb = cb || function () {}
   this._platform.end(cb)
+}
+
+
+oreo.prototype.startTransaction = function(client, callback) {
+  //self._platform.
+  let self = this
+  if (!client) {
+    topLevel = true
+    var conn = self._query.getConn({write: true})
+    self._platform.getClient(conn, function(err, _client, _release) {
+      client = _client
+      client._release = _release
+      client._nestedTransactionCount = 0;
+      client._currentTransaction = null; //TODO firebird
+      console.log('1');
+      next(err)  //move para proximo, BEGIN TRANSACTION
+    })
+    return
+  }
+
+  return client.transaction(FIREBIRD.ISOLATION_READ_COMMITED, callback);
+}
+
+oreo.prototype.beginTransaction = function(client, callback) {
+   let self = this    
+  /* client._nestedTransactionCount++
+      if (client._nestedTransactionCount === 1) {
+         //return db._platform.beginTransaction(client, next)
+         self._platform.beginTransaction(client, next)
+         console.log('ativado transacao');
+         if (next.response)                              //TODO firebird       
+           client._currentTransaction = next.response;  //TODO firebird
+        return  client;   //retorna aonde paraou  no ponto 1
+      }
+
+      console.log('sem transaçao ativa');
+      */
+}
+oreo.prototype.commitTransaction = function(client, cb) {
+  //this.execute(client, 'COMMIT', cb)
+  /*client._currentTransaction.commit(function(err) {
+    if (err)
+      client._currentTransaction.rollback();
+    else
+      client.detach();
+    
+   client._currentTransaction = null; //TODO firebird      
+  
+});
+*/
+
+}
+
+oreo.prototype.rollbackTransaction = function(client, cb) {
+  //this.execute(client, 'ROLLBACK', cb)
+  /*transaction.rollback();
+  client._currentTransaction = null; //TODO firebird
+  return;
+  */
 }
