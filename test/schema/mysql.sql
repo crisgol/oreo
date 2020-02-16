@@ -44,6 +44,27 @@ CREATE TABLE ratings (
   CONSTRAINT ratings_stars_key UNIQUE(stars)
 );
 
+create table reviews (
+  id INTEGER AUTO_INCREMENT,
+  book_id integer,
+  stars integer,
+  body varchar,
+  constraint review_pkey primary key(id),
+  CONSTRAINT book1 FOREIGN KEY (book_id) REFERENCES books(id)
+);
+
+
+CREATE TABLE `reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `book_id` int(11) DEFAULT NULL,
+  `stars` int(11) DEFAULT NULL,
+  `body` text,
+
+  CONSTRAINT reviews_pkey PRIMARY KEY(id),
+  KEY `book2` (`book_id`),
+  CONSTRAINT `book2` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`)
+)
+
 CREATE TABLE samples (
   id INTEGER AUTO_INCREMENT,
   author_id INTEGER,

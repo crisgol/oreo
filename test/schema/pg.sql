@@ -52,6 +52,15 @@ CREATE TABLE samples (
   CONSTRAINT rating FOREIGN KEY (author_id, book_id) REFERENCES ratings(author_id, book_id)
 );
 
+create table reviews (
+  id serial,
+  book_id integer,
+  stars integer,
+  body varchar,
+  constraint review_pkey primary key(id),
+  constraint book foreign key (book_id) references book(id)
+);
+
 CREATE TABLE battles (
   id SERIAL,
   author1_id INTEGER,
