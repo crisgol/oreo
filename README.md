@@ -697,3 +697,15 @@ book.update({
 ## Known Issues
 
 - Postgres tables containing `JSON` data type are not supported (use `JSONB` instead!)
+
+
+## Firbird 3.0
+
+https://github.com/mvitlov/vscode-db-explorer-firebird/issues/2
+AuthServer = Srp, Legacy_Auth
+WireCrypt = Enabled
+UserManager = Srp, Legacy_UserManager
+#create user SYSNODE password 'masterkey' using plugin Legacy_UserManager;
+CREATE USER SYSNODE2 PASSWORD 'masterkey' ACTIVE GRANT ADMIN ROLE using plugin Legacy_UserManager;
+DROP USER SYSNODE2
+
